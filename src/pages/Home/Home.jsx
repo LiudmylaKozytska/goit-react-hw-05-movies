@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import {
   Container,
   Title,
@@ -44,8 +44,10 @@ const Home = () => {
         {movies.map(({ id, title, image }) => {
           return (
             <PopMovieItem key={id}>
-              <PopMovieImage src={image} alt={title} />
-              <PopMovieTitle>{title}</PopMovieTitle>
+              <Link to={`movies/${id}`}>
+                <PopMovieImage src={image} alt={title} />
+                <PopMovieTitle>{title}</PopMovieTitle>
+              </Link>
             </PopMovieItem>
           );
         })}
