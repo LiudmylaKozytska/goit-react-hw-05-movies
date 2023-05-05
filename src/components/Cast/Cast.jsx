@@ -1,15 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import {
-  MovieDescription,
-  MovieSpanText,
-} from 'pages/MovieDetails/MovieDetailsStyle';
-import {
-  PopMovieImage,
-  PopMovieItem,
-  PopMoviesList,
-} from 'pages/Home/HomeStyle';
+import { MovieSpanText } from 'pages/MovieDetails/MovieDetailsStyle';
+import { PopMovieImage, PopMovieItem } from 'pages/Home/HomeStyle';
 import {
   CastList,
   CastDescription,
@@ -40,8 +33,6 @@ const Cast = () => {
         console.log(response);
 
         setCast(data);
-        console.log(data);
-        console.log(cast);
       } catch (error) {
         console.log(error);
       }
