@@ -30,7 +30,7 @@ export const PopMoviesList = styled.ul`
 
 export const PopMovieItem = styled.li`
   flex-grow: 1;
-  width: 300px;
+  width: 200px;
   border: 1px solid grey;
   box-shadow: 2px 2px 5px 2px rgba(0, 0, 0, 0.5);
 `;

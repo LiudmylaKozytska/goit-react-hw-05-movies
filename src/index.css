@@ -23,6 +23,11 @@ ul {
 
 a {
   text-decoration: none;
+
+}
+
+svg {
+  margin: 0 12px;
 }
 
 h1,

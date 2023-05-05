@@ -1,10 +1,10 @@
 import axios from 'axios';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { Input, Form } from './MoviesStyle';
+import { TfiSearch } from 'react-icons/tfi';
+import { Input, Form, Button } from './MoviesStyle';
 import {
   Container,
-  Title,
   PopMoviesList,
   PopMovieItem,
   PopMovieImage,
@@ -14,13 +14,15 @@ import {
 const API_KEY = '897e0a2614d8e23c2dbd931fea606526';
 
 const Movies = () => {
-  const [movie, setMovie] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [movie, setMovie] = useState([]);
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const searchQuery = searchParams.get('query');
+  const query = searchParams.get('query');
+  const location = useLocation();
 
   useEffect(() => {
-    if (searchQuery === null) {
+    if (query === null) {
       return;
     }
 
@@ -28,9 +30,14 @@ const Movies = () => {
       try {
         const response = await (
           await axios.get(
-            `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${searchQuery}`
+            `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${query}`
           )
         ).data.results;
+
+        if (!response.length) {
+          alert('We have not movies by this title.');
+          return;
+        }
         const data = response.map(
           ({ id, title, original_title, poster_path }) => ({
             id,
@@ -38,35 +45,53 @@ const Movies = () => {
             image: `https://image.tmdb.org/t/p/w500${poster_path}`,
           })
         );
-        console.log(data);
         setMovie(data);
       } catch (error) {
         console.log(error);
       }
     };
     getQueryMovie();
-  }, [searchParams]);
+  }, [query, searchParams]);
+
+  const onChange = ({ target }) => {
+    setSearchQuery(target.value);
+  };
 
   const handleSubmit = event => {
     event.preventDefault();
 
-    const query = event.target[0].value.trim();
-    setSearchParams({ query });
+    let value = event.target.elements.search.value;
+    setSearchQuery(value);
+    setSearchParams({ query: value });
+    if (query && query.trim() === '') {
+      alert('Type title of movie.');
+      return;
+    }
+    setSearchQuery('');
   };
 
   return (
     <Container>
-      <Form onSubmit={e => handleSubmit(e)}>
-        <label>
-          <Input type="text" placeholder="Search movie by name..."></Input>
-        </label>
+      <Form onSubmit={handleSubmit}>
+        <Button type="submit">
+          <TfiSearch />
+        </Button>
+        <Input
+          type="text"
+          autoComplete="off"
+          name="search"
+          autoFocus
+          placeholder="Search movie by name..."
+          value={searchQuery}
+          onChange={onChange}
+        ></Input>
       </Form>
-      {movie ? (
+      {movie && (
         <PopMoviesList>
           {movie.map(({ id, title, image }) => {
             return (
               <PopMovieItem key={id}>
-                <Link to={`movies/${id}`}>
+                <Link to={`${id}`} state={{ from: location }} key={id}>
                   <PopMovieImage src={image} alt={title} />
                   <PopMovieTitle>{title}</PopMovieTitle>
                 </Link>
@@ -74,8 +99,6 @@ const Movies = () => {
             );
           })}
         </PopMoviesList>
-      ) : (
-        <></>
       )}
     </Container>
   );
