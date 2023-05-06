@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import {
   Container,
   Title,
@@ -16,7 +16,6 @@ const URL = `https://api.themoviedb.org/3/trending/movie/day?api_key=${API_KEY}`
 
 const Home = () => {
   const [movies, setMovies] = useState([]);
-  const location = useLocation();
 
   useEffect(() => {
     const getMovies = async () => {

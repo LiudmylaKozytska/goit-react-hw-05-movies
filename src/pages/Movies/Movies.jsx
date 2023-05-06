@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { Link, useSearchParams, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import Notiflix from 'notiflix';
 import { TfiSearch } from 'react-icons/tfi';
 import { Input, Form, Button } from './MoviesStyle';
 import {
@@ -34,8 +35,8 @@ const Movies = () => {
           )
         ).data.results;
 
-        if (!response.length) {
-          alert('We have not movies by this title.');
+        if (response.length === 0) {
+          Notiflix.Notify.warning('We have not movies by this title.');
           return;
         }
         const data = response.map(
@@ -64,7 +65,7 @@ const Movies = () => {
     setSearchQuery(value);
     setSearchParams({ query: value });
     if (query && query.trim() === '') {
-      alert('Type title of movie.');
+      Notiflix.Notify.warning('Type title of movie.');
       return;
     }
     setSearchQuery('');

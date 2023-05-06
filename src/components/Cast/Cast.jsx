@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import anonimImage from 'image/anonim_image.jpg';
 import { MovieSpanText } from 'pages/MovieDetails/MovieDetailsStyle';
 import { PopMovieImage, PopMovieItem } from 'pages/Home/HomeStyle';
 import {
@@ -9,6 +10,7 @@ import {
   CastCharacter,
   CastListContainer,
 } from './CastStyle';
+import { ReviewsAlert } from 'components/Reviews/ReviewsStyle';
 
 const API_KEY = '897e0a2614d8e23c2dbd931fea606526';
 
@@ -24,30 +26,37 @@ const Cast = () => {
             `https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=${API_KEY}`
           )
         ).data.cast;
-        const data = response.map(({ id, character, name, profile_path }) => ({
-          id,
-          name,
-          image: `https://image.tmdb.org/t/p/w500${profile_path}`,
-          character,
-        }));
-        console.log(response);
-
+        const data = response.map(
+          ({ cast_id, character, name, profile_path }) => ({
+            id: cast_id,
+            name,
+            profile_path,
+            character,
+          })
+        );
         setCast(data);
       } catch (error) {
         console.log(error);
       }
     };
     getCast();
-  }, []);
+  }, [movieId]);
 
   return (
     <>
       {cast !== null && cast.length !== 0 ? (
         <CastListContainer>
           <CastList>
-            {cast.map(({ id, character, name, image }) => (
+            {cast.map(({ id, character, name, profile_path }) => (
               <PopMovieItem key={id}>
-                <PopMovieImage src={image} alt={name} />
+                <PopMovieImage
+                  src={
+                    profile_path
+                      ? `https://image.tmdb.org/t/p/w500${profile_path}`
+                      : anonimImage
+                  }
+                  alt={name}
+                />
                 <CastDescription>
                   <MovieSpanText>{name}</MovieSpanText>
                   <CastCharacter>{character}</CastCharacter>
@@ -57,9 +66,9 @@ const Cast = () => {
           </CastList>
         </CastListContainer>
       ) : (
-        <MovieSpanText>
+        <ReviewsAlert>
           Sorry, but we don't have a list of cast for this movie.
-        </MovieSpanText>
+        </ReviewsAlert>
       )}
     </>
   );

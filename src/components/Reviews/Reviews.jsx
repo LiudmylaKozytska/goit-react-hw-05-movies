@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import { ReviewsList, ReviewsText } from './ReviewsStyle';
+import { ReviewsList, ReviewsText, ReviewsAlert } from './ReviewsStyle';
 
 const API_KEY = '897e0a2614d8e23c2dbd931fea606526';
 
@@ -27,12 +27,12 @@ const Reviews = () => {
       }
     };
     getReview();
-  }, []);
+  }, [movieId]);
 
   return (
     <ReviewsList>
       {!review.length ? (
-        <ReviewsText>Opps...there is no reviews</ReviewsText>
+        <ReviewsAlert>Opps...there is no reviews</ReviewsAlert>
       ) : (
         review.map(({ id, content }) => {
           return (

@@ -21,3 +21,9 @@ export const ReviewsText = styled.p`
   font-size: 18px;
   margin: 8px;
 `;
+
+export const ReviewsAlert = styled.p`
+  font-size: 28px;
+  margin: 16px;
+  font-weight: 600;
+`;

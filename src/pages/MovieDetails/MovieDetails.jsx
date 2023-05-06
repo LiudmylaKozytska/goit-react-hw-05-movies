@@ -1,8 +1,9 @@
 import axios from 'axios';
-import { Container, Title } from 'pages/Home/HomeStyle';
 import { useState, useEffect, useRef, Suspense } from 'react';
 import { useParams, useLocation, Outlet } from 'react-router-dom';
 import { BsArrowLeft, BsBoxArrowInDown } from 'react-icons/bs';
+import Notiflix from 'notiflix';
+import { Container, Title } from 'pages/Home/HomeStyle';
 import {
   MovieContainer,
   MovieDescription,
@@ -16,7 +17,6 @@ const API_KEY = '897e0a2614d8e23c2dbd931fea606526';
 
 const MovieDetails = () => {
   const [movie, setMovie] = useState(null);
-  const [error, setError] = useState(null);
   const location = useLocation();
   const backPage = useRef(location.state?.from ?? '/');
   const { movieId } = useParams();
@@ -48,17 +48,20 @@ const MovieDetails = () => {
         };
 
         setMovie(movieObj);
+
+        if (response.length === 0) {
+          Notiflix.Notify.warning('There are no movies by this title');
+        }
       } catch (error) {
         console.log(error);
-        setError('This movie has not details.');
+        Notiflix.Notify.warning('This movie has not details.');
       }
     };
     getMovieById();
-  }, []);
+  }, [movieId]);
 
   return (
     <Container>
-      {error && <p>{error}</p>}
       {movie && (
         <>
           <MovieIdLink to={backPage.current}>
