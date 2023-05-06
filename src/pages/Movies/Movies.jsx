@@ -3,6 +3,7 @@ import { Link, useSearchParams, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import Notiflix from 'notiflix';
 import { TfiSearch } from 'react-icons/tfi';
+import anonimImage from 'image/anonim_image.jpg';
 import { Input, Form, Button } from './MoviesStyle';
 import {
   Container,
@@ -43,7 +44,7 @@ const Movies = () => {
           ({ id, title, original_title, poster_path }) => ({
             id,
             title: title || original_title,
-            image: `https://image.tmdb.org/t/p/w500${poster_path}`,
+            poster_path,
           })
         );
         setMovie(data);
@@ -89,11 +90,18 @@ const Movies = () => {
       </Form>
       {movie && (
         <PopMoviesList>
-          {movie.map(({ id, title, image }) => {
+          {movie.map(({ id, title, poster_path }) => {
             return (
               <PopMovieItem key={id}>
                 <Link to={`${id}`} state={{ from: location }} key={id}>
-                  <PopMovieImage src={image} alt={title} />
+                  <PopMovieImage
+                    src={
+                      poster_path
+                        ? `https://image.tmdb.org/t/p/w500${poster_path}`
+                        : anonimImage
+                    }
+                    alt={title}
+                  />
                   <PopMovieTitle>{title}</PopMovieTitle>
                 </Link>
               </PopMovieItem>

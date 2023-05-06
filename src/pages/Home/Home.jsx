@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import anonimImage from 'image/anonim_image.jpg';
 import {
   Container,
   Title,
@@ -25,7 +26,7 @@ const Home = () => {
           ({ id, title, original_title, poster_path }) => ({
             id,
             title: title || original_title,
-            image: `https://image.tmdb.org/t/p/w500${poster_path}`,
+            poster_path,
           })
         );
         setMovies(data);
@@ -40,11 +41,18 @@ const Home = () => {
     <Container>
       <Title>Trending today</Title>
       <PopMoviesList>
-        {movies.map(({ id, title, image }) => {
+        {movies.map(({ id, title, poster_path }) => {
           return (
             <PopMovieItem key={id}>
               <Link to={`movies/${id}`}>
-                <PopMovieImage src={image} alt={title} />
+                <PopMovieImage
+                  src={
+                    poster_path
+                      ? `https://image.tmdb.org/t/p/w500${poster_path}`
+                      : anonimImage
+                  }
+                  alt={title}
+                />
                 <PopMovieTitle>{title}</PopMovieTitle>
               </Link>
             </PopMovieItem>
